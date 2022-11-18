@@ -6,8 +6,8 @@
 using namespace std;
 
 int main() {
-    // Taka konstrukcja nie powinna się kompilować.
-    // Moneybag m0;
+//     Taka konstrukcja nie powinna siÄ™ kompilowaÄ‡.
+//     Moneybag m0;
 
     Moneybag m1 = Moneybag(1, 10, 19);
     Moneybag m2 = 2 * Solidus + 17 * Denier;
@@ -56,9 +56,10 @@ int main() {
     assert(350 < v2);
     assert(0 == Value());
 
-    // Te konstrukcje nie powinny się kompilować.
-    // Livre = Denier;
-    // Denier = Solidus;
-    // Solidus = Livre;
-    // int k = Moneybag(1, 2, 3);
+    // Te konstrukcje nie powinny siÄ™ kompilowaÄ‡.
+//     Livre = Denier;
+//     Denier = Solidus;
+//     Solidus = Livre;
+//     int k = Moneybag(1, 2, 3);
+    return 0;
 }
