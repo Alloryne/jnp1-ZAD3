@@ -70,10 +70,13 @@ public:
     // obiektu Value z liczbą całkowitą nieujemną
     std::strong_ordering operator<=>(Value const &) const = default;
     constexpr bool operator==(Value const &) const = default;
-    std::strong_ordering operator<=>(const uint64_t &) const;
-    constexpr bool operator==(const uint64_t &) const;
+    std::strong_ordering operator<=>(const __uint128_t &) const;
+    constexpr bool operator==(const __uint128_t &) const;
     // Wypisywanie wartości
     explicit operator std::string () const;
+    // Rzut na int
+    Value::operator __uint128_t () const;
+}
 
 private:
     __uint128_t v;

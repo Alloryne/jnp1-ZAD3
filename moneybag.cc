@@ -140,3 +140,7 @@ Value::operator std::string() const {
     return str;
 }
 
+Value::operator __uint128_t () const {
+    return v;
+}
+
