@@ -2,39 +2,32 @@
 
 using coin_number_t = Moneybag::coin_number_t;
 
-Moneybag::Moneybag(coin_number_t l, coin_number_t s , coin_number_t d) : m_livre(l), m_solidus(s), m_denier(d) {}
+// Konstruktory
+constexpr Moneybag::Moneybag(   coin_number_t l, 
+                                coin_number_t s , 
+                                coin_number_t d)
+    : m_livre(l), m_solidus(s), m_denier(d) {} 
 
-Moneybag::Moneybag(const Moneybag & m) : m_livre(m.m_livre), m_solidus(m.m_solidus), m_denier(m.m_denier) {}
-
-coin_number_t Moneybag::livre_number() const {
+// Akcesory
+constexpr coin_number_t Moneybag::livre_number() const {
     return m_livre;
 }
 
-coin_number_t Moneybag::solidus_number() const{
+constexpr coin_number_t Moneybag::solidus_number() const {
     return m_solidus;
 }
 
-coin_number_t Moneybag::denier_number() const{
+constexpr coin_number_t Moneybag::denier_number() const {
     return m_denier;
 }
 
-Moneybag operator+(const Moneybag& lhs, const Moneybag& rhs){
-    return {lhs.m_livre + rhs.m_livre, lhs.m_solidus + rhs.m_solidus,  lhs.m_denier + rhs.m_denier};
-}
-
-Moneybag operator-(const Moneybag& lhs, const Moneybag& rhs){
-    return {lhs.m_livre - rhs.m_livre,  lhs.m_solidus - rhs.m_solidus, lhs.m_denier - rhs.m_denier};
-}
-
-Moneybag operator*(const Moneybag& lhs, const coin_number_t scalar){
-    return {scalar * lhs.m_livre  , scalar *  lhs.m_solidus, scalar * lhs.m_denier};
-}
-
-Moneybag operator*(const coin_number_t scalar, const Moneybag& rhs){
-    return rhs * scalar;
-}
-
+// Operacje arytmetyczne
 Moneybag &Moneybag::operator+=(const Moneybag &rhs) {
+    if (m_livre + rhs.m_livre < m_livre ||
+        m_solidus + rhs.m_solidus < m_solidus ||
+        m_denier + rhs.m_denier < m_denier) {
+        throw std::out_of_range("Wynik z poza zakresu");
+    }
     m_livre += rhs.m_livre;
     m_solidus += rhs.m_solidus;
     m_denier += rhs.m_denier;
@@ -42,6 +35,11 @@ Moneybag &Moneybag::operator+=(const Moneybag &rhs) {
 }
 
 Moneybag &Moneybag::operator-=(const Moneybag &rhs) {
+    if (m_livre - rhs.m_livre > m_livre ||
+        m_solidus - rhs.m_solidus > m_solidus ||
+        m_denier - rhs.m_denier > m_denier) {
+        throw std::out_of_range("Wynik z poza zakresu");
+    }
     m_livre -= rhs.m_livre;
     m_solidus -= rhs.m_solidus;
     m_denier -= rhs.m_denier;
@@ -49,12 +47,35 @@ Moneybag &Moneybag::operator-=(const Moneybag &rhs) {
 }
 
 Moneybag &Moneybag::operator*=(coin_number_t t) {
+    if ((m_livre * t) / t != m_livre ||
+        (m_solidus * t) / t != m_solidus ||
+        (m_denier * t) / t != m_denier) {
+        throw std::out_of_range("Wynik z poza zakresu");
+    }
     m_livre *= t;
     m_solidus *= t;
     m_denier *= t;
     return *this;
 }
 
+// Operacje arytmetyczne zaimplementowane za pomocą powyższych
+Moneybag operator+(const Moneybag& lhs, const Moneybag& rhs) {
+    return Moneybag(lhs) += rhs;
+}
+
+Moneybag operator-(const Moneybag& lhs, const Moneybag& rhs) {
+    return Moneybag(lhs) -= rhs;
+}
+
+Moneybag operator*(const Moneybag& lhs, const coin_number_t scalar) {
+    return Moneybag(lhs) *= scalar;
+}
+
+Moneybag operator*(const coin_number_t scalar, const Moneybag& rhs) {
+    return Moneybag(rhs) *= scalar;
+}
+
+// Wypisywanie
 std::ostream &operator<<(std::ostream & os, const Moneybag & m) {
     os << "("
        << m.livre_number()
@@ -67,56 +88,61 @@ std::ostream &operator<<(std::ostream & os, const Moneybag & m) {
     return os;
 }
 
-Moneybag::operator bool() const {
-    return m_livre != 0 || m_solidus != 0 || m_denier != 0;
-}
 
-Moneybag &Moneybag::operator=(const Moneybag &rhs) {
-    m_livre = rhs.m_livre;
-    m_solidus = rhs.m_solidus;
-    m_denier = rhs.m_denier;
-    return *this;
-}
 
-bool Moneybag::operator==(const Moneybag &rhs) const {
-    return m_livre == rhs.m_livre && m_solidus == rhs.m_solidus && m_denier == rhs.m_denier ;
-}
-
-bool Moneybag::operator<=(const Moneybag & rhs) const {
-    if(m_livre <= rhs.m_livre && m_solidus <= rhs.m_solidus && m_denier <= rhs.m_denier)
-        return  true;
-    else
-        return false;
-}
-
-bool Moneybag::operator>=(const Moneybag & rhs) const {
-    if(m_livre >= rhs.m_livre && m_solidus >= rhs.m_solidus && m_denier >= rhs.m_denier){
-        return  true;
-    }else{
-        return false;
-    }
-}
-
+// Porównywanie
 std::partial_ordering Moneybag::operator<=>(const Moneybag & rhs) const {
-    if(*this <= rhs)
+    if (m_livre == rhs.m_livre &&
+            m_solidus == rhs.m_solidus &&
+            m_denier == rhs.m_denier) {
+        return std::partial_ordering::equivalent;
+    }
+    if (m_livre <= rhs.m_livre &&
+        m_solidus <= rhs.m_solidus &&
+        m_denier <= rhs.m_denier) {
         return std::partial_ordering::less;
-    if(*this >= rhs)
+    }
+    if (m_livre >= rhs.m_livre &&
+        m_solidus >= rhs.m_solidus &&
+        m_denier >= rhs.m_denier) {
         return std::partial_ordering::greater;
+    } 
     return std::partial_ordering::unordered;
 }
 
-Value::Value(Moneybag m) : v(m.livre_number() * 240 +
-                             m.solidus_number() * 12 + m.denier_number()){};
+// Rzutowanie na bool
+constexpr Moneybag::operator bool() const {
+    return m_livre != 0 || m_solidus != 0 || m_denier != 0;
+}
 
-Value::Value(Moneybag::coin_number_t n) : v(n) {}
+// Klasa Value
+// Konstruktory
+Value::Value(Moneybag m) 
+    : v(m.livre_number() * 240 + m.solidus_number() * 12 + m.denier_number()) 
+    {};
+
+Value::Value(__uint128_t n) : v(n) {}
 
 Value::Value() : v(0){}
 
-Value::operator Moneybag::coin_number_t () const {
-    return v;
-}
+// Porównywanie obiektu Value z liczbą całkowitą nieujemną
+std::strong_ordering Value::operator<=>(__uint128_t c) const {
+    return this->v <=> c;
+    
+};
+constexpr bool Value::operator==(const __uint128_t c) const {
+    return (this->v == c);
+};
 
 Value::operator std::string() const {
-    return std::to_string(v);
+    __uint128_t temp = v;
+
+    std::string str;
+    do {
+        uint8_t digit = temp % 10;
+        str = std::to_string(digit) + str;
+        temp = (temp - digit) / 10;
+    } while (temp != 0);
+    return str;
 }
 
