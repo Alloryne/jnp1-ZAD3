@@ -2,6 +2,12 @@
 
 using coin_number_t = Moneybag::coin_number_t;
 
+// Konstruktory
+constexpr Moneybag( coin_number_t l, 
+                        coin_number_t s , 
+                        coin_number_t d)
+    : m_livre(l), m_solidus(s), m_denier(d) {};  
+
 // Akcesory
 constexpr coin_number_t Moneybag::livre_number() const {
     return m_livre;
