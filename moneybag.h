@@ -52,9 +52,9 @@ Moneybag operator*(const Moneybag& lhs, const Moneybag::coin_number_t scalar);
 std::ostream& operator<<(std::ostream&, Moneybag const& );
 
 // Stałe obiekty inicjalizowane podczas kompilacji
-constexpr Moneybag Livre = Moneybag(1, 0, 0);
-constexpr Moneybag Solidus = Moneybag(0, 1, 0);
-constexpr Moneybag Denier = Moneybag(0, 0, 1);
+constinit const Moneybag Livre = Moneybag(1, 0, 0);
+constinit const Moneybag Solidus = Moneybag(0, 1, 0);
+constinit const Moneybag Denier = Moneybag(0, 0, 1);
 
 class Value{
 public:
