@@ -22,7 +22,8 @@ public:
     // Konstruktory
     constexpr Moneybag( coin_number_t l, 
                         coin_number_t s , 
-                        coin_number_t d); 
+                        coin_number_t d)
+    : m_livre(l), m_solidus(s), m_denier(d) {};  
     constexpr Moneybag(const Moneybag&) = default;
     Moneybag() = delete; 
     // Akcesory
@@ -45,8 +46,8 @@ public:
 // Operacje arytmetyczne implementowane za operacji z klasy
 Moneybag operator+(const Moneybag& lhs, const Moneybag& rhs) ;
 Moneybag operator-(const Moneybag& lhs, const Moneybag& rhs);
-Moneybag operator*(const coin_number_t scalar, const Moneybag& rhs);
-Moneybag operator*(const Moneybag& lhs, const coin_number_t scalar);
+Moneybag operator*(const Moneybag::coin_number_t scalar, const Moneybag& rhs);
+Moneybag operator*(const Moneybag& lhs, const Moneybag::coin_number_t scalar);
 
 std::ostream& operator<<(std::ostream&, Moneybag const& );
 
