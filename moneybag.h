@@ -135,12 +135,13 @@ class Value{
 public:
     // Konstruktory
     explicit Value(Moneybag m)
-            : v(m.livre_number() * 240 + m.solidus_number() * 12 + m.denier_number()){}
+            : v(
+            __uint128_t(m.livre_number()) * 240 
+            + __uint128_t(m.solidus_number()) * 12 
+            + __uint128_t(m.denier_number())) {}
+
     explicit Value(__uint128_t n) : v(n) {}
     explicit Value() : v(0){}
-
-
-
 
     // Kopiowanie
     Value &operator=(const Value &) = default;
