@@ -40,24 +40,20 @@ public:
     bool operator==(const Moneybag& rhs) const = default;
     // Rzutowanie na bool
     constexpr explicit operator bool() const;
-private:
-    coin_number_t m_livre;
-    coin_number_t m_solidus;
-    coin_number_t m_denier;
 };
 
 // Operacje arytmetyczne implementowane za operacji z klasy
 Moneybag operator+(const Moneybag& lhs, const Moneybag& rhs) ;
 Moneybag operator-(const Moneybag& lhs, const Moneybag& rhs);
-Moneybag operator*(coin_number_t scalar, const Moneybag& rhs);
-Moneybag operator*(const Moneybag& lhs, coin_number_t scalar);
+Moneybag operator*(const coin_number_t scalar, const Moneybag& rhs);
+Moneybag operator*(const Moneybag& lhs, const coin_number_t scalar);
 
 std::ostream& operator<<(std::ostream&, Moneybag const& );
 
 // Stałe obiekty inicjalizowane podczas kompilacji
-consteval Moneybag Livre = Moneybag(1, 0, 0);
-consteval Moneybag Solidus = Moneybag(0, 1, 0);
-consteval Moneybag Denier = Moneybag(0, 0, 1);
+constexpr Moneybag Livre = Moneybag(1, 0, 0);
+constexpr Moneybag Solidus = Moneybag(0, 1, 0);
+constexpr Moneybag Denier = Moneybag(0, 0, 1);
 
 class Value{
 public:
@@ -72,8 +68,9 @@ public:
     // Porównywanie obiektów Value, a także 
     // obiektu Value z liczbą całkowitą nieujemną
     std::strong_ordering operator<=>(Value const &) const = default;
-    std::strong_ordering operator<=>(__uint128_t c) const;
-    constexpr bool operator==(const __uint128_t c) const;
+    constexpr bool operator==(Value const &) const = default;
+    std::strong_ordering operator<=>(const __uint128_t &) const;
+    constexpr bool operator==(const __uint128_t &) const;
     // Wypisywanie wartości
     explicit operator std::string () const;
 

@@ -126,11 +126,11 @@ Value::Value(__uint128_t n) : v(n) {}
 Value::Value() : v(0){}
 
 // Porównywanie obiektu Value z liczbą całkowitą nieujemną
-std::strong_ordering Value::operator<=>(__uint128_t c) const {
+std::strong_ordering Value::operator<=>(const __uint128_t &c) const {
     return this->v <=> c;
     
 };
-constexpr bool Value::operator==(const __uint128_t c) const {
+constexpr bool Value::operator==(const __uint128_t &c) const {
     return (this->v == c);
 };
 
