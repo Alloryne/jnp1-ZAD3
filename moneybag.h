@@ -7,9 +7,6 @@
 #include <compare>
 #include <string>
 
-// TODO
-// Użycie poprawne inline
-
 class Moneybag
 {
 public:
@@ -28,17 +25,17 @@ public:
     Moneybag() = delete;
 
     // Akcesory
-    constexpr coin_number_t livre_number() const{
+    constexpr coin_number_t livre_number() const {
         return m_livre;
     }
-    constexpr coin_number_t solidus_number() const{
+    constexpr coin_number_t solidus_number() const {
         return m_solidus;
     }
-    constexpr coin_number_t denier_number() const{
+    constexpr coin_number_t denier_number() const {
         return m_denier;
     }
     // Operacje arytmetyczne z przypisaniem
-    Moneybag& operator+=(const Moneybag& rhs){
+    Moneybag& operator+=(const Moneybag& rhs) {
         if (m_livre + rhs.m_livre < m_livre ||
             m_solidus + rhs.m_solidus < m_solidus ||
             m_denier + rhs.m_denier < m_denier) {
@@ -49,7 +46,7 @@ public:
         m_denier += rhs.m_denier;
         return *this;
     }
-    Moneybag& operator-=(const Moneybag& rhs){
+    Moneybag& operator-=(const Moneybag& rhs) {
         if (m_livre - rhs.m_livre > m_livre ||
             m_solidus - rhs.m_solidus > m_solidus ||
             m_denier - rhs.m_denier > m_denier) {
@@ -60,7 +57,7 @@ public:
         m_denier -= rhs.m_denier;
         return *this;
     }
-    Moneybag& operator*=(coin_number_t t){
+    Moneybag& operator*=(coin_number_t t) {
         if ((m_livre * t) / t != m_livre ||
             (m_solidus * t) / t != m_solidus ||
             (m_denier * t) / t != m_denier) {
@@ -74,7 +71,7 @@ public:
     // Przypisywanie
     constexpr Moneybag& operator=(const Moneybag& rhs) = default;
     // Porównywanie
-    std::partial_ordering operator<=>(const Moneybag& rhs) const{
+    std::partial_ordering operator<=>(const Moneybag& rhs) const {
         if (m_livre == rhs.m_livre &&
             m_solidus == rhs.m_solidus &&
             m_denier == rhs.m_denier) {
@@ -104,13 +101,13 @@ public:
 Moneybag operator+(const Moneybag& lhs, const Moneybag& rhs) {
     return Moneybag(lhs) += rhs;
 }
-Moneybag operator-(const Moneybag& lhs, const Moneybag& rhs){
+Moneybag operator-(const Moneybag& lhs, const Moneybag& rhs) {
     return Moneybag(lhs) -= rhs;
 }
-Moneybag operator*(const Moneybag::coin_number_t scalar, const Moneybag& rhs){
+Moneybag operator*(const Moneybag::coin_number_t scalar, const Moneybag& rhs) {
     return Moneybag(rhs) *= scalar;
 }
-Moneybag operator*(const Moneybag& lhs, const Moneybag::coin_number_t scalar){
+Moneybag operator*(const Moneybag& lhs, const Moneybag::coin_number_t scalar) {
     return Moneybag(lhs) *= scalar;
 }
 
